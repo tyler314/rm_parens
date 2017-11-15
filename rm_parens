@@ -2,6 +2,7 @@
 
 import sys
 import re
+import six
 
 def unnecessary_parens(line):
     if re.match('[ \t]*(if|while)[ \t]*\(.*\)[ \t]*:', line):
@@ -16,7 +17,8 @@ def remove_parens(line):
         index = line.index('while(') + 2
         line = line[:index] + ' ' + line[index:]
     # Set index to be placed at the paren
-    open_paren_match = re.match('[ \t]*(if|while)[ \t]*\(', line)[0]
+    match = re.match('[ \t]*(if|while)[ \t]*\(', line)
+    open_paren_match = match[0] if six.PY3 else match.group(0)
     open_paren_index = line.index(open_paren_match) + len(open_paren_match) - 1
     close_paren_index = None
     for char_i in range(len(line)-1, -1, -1):
