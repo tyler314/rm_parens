@@ -16,7 +16,7 @@ def remove_parens(line):
         index = line.index('while(') + 2
         line = line[:index] + ' ' + line[index:]
     # Set index to be placed at the paren
-    open_paren_match = re.match('[ \t]*(if|while)[ \t]*\(', line).group(0)
+    open_paren_match = re.match('[ \t]*(if|while)[ \t]*\(', line)[0]
     open_paren_index = line.index(open_paren_match) + len(open_paren_match) - 1
     close_paren_index = None
     for char_i in range(len(line)-1, -1, -1):
