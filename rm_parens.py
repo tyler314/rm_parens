@@ -14,7 +14,7 @@ def remove_parens(line):
         index = line.index('if(') + 2
         line = line[:index] + ' ' + line[index:]
     elif 'while(' in line:
-        index = line.index('while(') + 2
+        index = line.index('while(') + 5
         line = line[:index] + ' ' + line[index:]
     # Set index to be placed at the paren
     match = re.match('[ \t]*(if|while)[ \t]*\(', line)
