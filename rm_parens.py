@@ -55,7 +55,7 @@ class RemoveParens(object):
         if self._has_outside_parens():
             self._set_open_parens_index()
             self._set_close_parens_index()
-            # Ensure that nested parens are not dependent on the outer parens 
+            # Ensure that nested parens are not dependent on the outer parens
             cnt_matching_parens = 0
             for i in range(self._open_paren_index + 1, self._close_paren_index):
                 if self.line[i] == '(':
