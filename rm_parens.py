@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """
-Takes a Python file in as an argument and removes unnecessary parenthesis use in if and
-while blocks. It could be an file type, but the file is assumed to have Python code and
-proper syntax.
+Takes a Python file in as an argument and removes unnecessary parenthesis used in 'if'
+and 'while' blocks. It could be any file type, but the file is assumed to have Python
+code and the proper syntax.
 """
 
 import sys
