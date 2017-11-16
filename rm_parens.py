@@ -69,15 +69,19 @@ class RemoveParens(object):
 
 
 if __name__ == '__main__':
-    fileLines = open(sys.argv[1], 'r').readlines()
-    newFileLines = []
-    updatedLine = None
-    with open(sys.argv[1], 'w') as f:
-        try:
-            for line in fileLines:
-                updatedLine = RemoveParens(line)
-                newFileLines.append(updatedLine.line)
-            f.write(''.join(newFileLines))
-        # If something goes wrong, write the file to it's original state
-        except BaseException:
-            f.write(''.join(fileLines))
+    if len(sys.argv) < 2:
+        print('Need to pass at least one file to edit as an argument')
+        sys.exit(1)
+    for i in range(1, len(sys.argv)):
+        fileLines = open(sys.argv[i], 'r').readlines()
+        newFileLines = []
+        updatedLine = None
+        with open(sys.argv[i], 'w') as f:
+            try:
+                for line in fileLines:
+                    updatedLine = RemoveParens(line)
+                    newFileLines.append(updatedLine.line)
+                f.write(''.join(newFileLines))
+            # If something goes wrong, write the file to it's original state
+            except BaseException:
+                f.write(''.join(fileLines))
