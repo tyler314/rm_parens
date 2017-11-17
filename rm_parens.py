@@ -10,7 +10,7 @@ import re
 import six
 
 
-def removeParens(line):
+def remove_parens(line):
     """
     Takes a string in and removes the unnecessary parenthesis, set the line class variable
     to the updated string. The line class variable will remain unchanged if no unnecessary
@@ -71,9 +71,9 @@ def removeParens(line):
         return False
 
     if unnecessary_parens(line):
-        return line[:get_open_parens_index(line)] + line[get_open_parens_index(line) + 1:get_close_parens_index(line)] + line[get_close_parens_index(line) + 1:]
-    else:
-        return line
+        return line[:get_open_parens_index(line)] + line[get_open_parens_index(
+            line) + 1:get_close_parens_index(line)] + line[get_close_parens_index(line) + 1:]
+    return line
 
 
 if __name__ == '__main__':
@@ -87,7 +87,7 @@ if __name__ == '__main__':
         with open(sys.argv[i], 'w') as f:
             try:
                 for line in fileLines:
-                    newFileLines.append(removeParens(line))
+                    newFileLines.append(remove_parens(line))
                 f.write(''.join(newFileLines))
             # If something goes wrong, write the file to it's original state
             except BaseException:
