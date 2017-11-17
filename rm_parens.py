@@ -31,31 +31,15 @@ def remove_parens(string):
         open_paren_match = match[0] if six.PY3 else match.group(0)
         return string.index(open_paren_match) + len(open_paren_match) - 1
 
-    def get_close_parens_index(string):
-        """
-        Return the index of the last close paren in the string.
-        """
-        for char_i in range(len(string) - 1, -1, -1):
-            if string[char_i] == ')':
-                return char_i
-
-    def has_outside_parens(string):
-        """
-        Returns true if 'string' is an if or while statement, that has parentheses on the
-        outside of its conditional.
-        """
-        if re.match(r'[ \t]*(if|while)[ \t]*\(.*\)[ \t]*:', string):
-            return True
-        return False
-
     def unnecessary_parens(string):
         """
         Returns True if 'string' is an if or while statement, that has unnecessary
         parentheses aorund its conditional. Returns False otherwise.
         """
-        if has_outside_parens(string):
+        # Check if string has an outside parenthesis
+        if re.match(r'[ \t]*(if|while)[ \t]*\(.*\)[ \t]*:', string):
             open_parens_index = get_open_parens_index(string)
-            close_parens_index = get_close_parens_index(string)
+            close_parens_index = len(string) - string[::-1].index(')')
             # Ensure that nested parens are not dependent on the outer parens
             cnt_matching_parens = 0
             for i in range(open_parens_index + 1, close_parens_index):
