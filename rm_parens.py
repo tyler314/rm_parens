@@ -42,7 +42,7 @@ def remove_parens(string):
         Returns True if 'string' is an if or while statement, that has unnecessary
         parentheses aorund its conditional. Returns False otherwise.
         """
-        # Check if string has an outside parenthesis
+        # Check if string has outside parentheses
         if re.match(r'[ \t]*(if|while)[ \t]*\(.*\)[ \t]*:', string):
             open_parens_index = get_open_parens_index(string)
             close_parens_index = get_close_parens_index(string)
