@@ -7,8 +7,49 @@ code and the proper syntax.
 from __future__ import print_function
 import sys
 import re
-import six
 
+def _get_open_parens_index(string):
+    """
+    Return the index of the first open paren in the string.
+    """
+    if 'if(' in string:
+        index = string.index('if(') + 2
+        string = string[:index] + ' ' + string[index:]
+    elif 'while(' in string:
+        index = string.index('while(') + 5
+        string = string[:index] + ' ' + string[index:]
+    # Set index to be placed at the opening paren
+    match = re.match(r'[ \t]*(if|while)[ \t]*\(', string)
+    open_paren_match = match.group(0)
+    return string.index(open_paren_match) + len(open_paren_match) - 1
+
+def _get_close_parens_index(string):
+    """
+    Return the index of the last close paren in the string.
+    """
+    return len(string) - string[::-1].index(')') - 1
+
+def _unnecessary_parens(string):
+    """
+    Returns True if 'string' is an if or while statement, that has unnecessary
+    parentheses aorund its conditional. Returns False otherwise.
+    """
+    # Check if string has outside parentheses
+    if re.match(r'[ \t]*(if|while)[ \t]*\(.*\)[ \t]*:', string):
+        open_parens_index = _get_open_parens_index(string)
+        close_parens_index = _get_close_parens_index(string)
+        # Ensure that nested parens are not dependent on the outer parens
+        cnt_matching_parens = 0
+        for i in range(open_parens_index + 1, close_parens_index):
+            if string[i] == '(':
+                cnt_matching_parens += 1
+            elif string[i] == ')':
+                cnt_matching_parens -= 1
+                if cnt_matching_parens < 0:
+                    return False
+        if cnt_matching_parens == 0:
+            return True
+    return False
 
 def remove_parens(string):
     """
@@ -16,52 +57,9 @@ def remove_parens(string):
     the same input if no unnecessary parenthesis exist.
     """
 
-    def get_open_parens_index(string):
-        """
-        Return the index of the first open paren in the string.
-        """
-        if 'if(' in string:
-            index = string.index('if(') + 2
-            string = string[:index] + ' ' + string[index:]
-        elif 'while(' in string:
-            index = string.index('while(') + 5
-            string = string[:index] + ' ' + string[index:]
-        # Set index to be placed at the opening paren
-        match = re.match(r'[ \t]*(if|while)[ \t]*\(', string)
-        open_paren_match = match[0] if six.PY3 else match.group(0)
-        return string.index(open_paren_match) + len(open_paren_match) - 1
-
-    def get_close_parens_index(string):
-        """
-        Return the index of the last close paren in the string.
-        """
-        return len(string) - string[::-1].index(')') - 1
-
-    def unnecessary_parens(string):
-        """
-        Returns True if 'string' is an if or while statement, that has unnecessary
-        parentheses aorund its conditional. Returns False otherwise.
-        """
-        # Check if string has outside parentheses
-        if re.match(r'[ \t]*(if|while)[ \t]*\(.*\)[ \t]*:', string):
-            open_parens_index = get_open_parens_index(string)
-            close_parens_index = get_close_parens_index(string)
-            # Ensure that nested parens are not dependent on the outer parens
-            cnt_matching_parens = 0
-            for i in range(open_parens_index + 1, close_parens_index):
-                if string[i] == '(':
-                    cnt_matching_parens += 1
-                elif string[i] == ')':
-                    cnt_matching_parens -= 1
-                    if cnt_matching_parens < 0:
-                        return False
-            if cnt_matching_parens == 0:
-                return True
-        return False
-
-    if unnecessary_parens(string):
-        return string[:get_open_parens_index(string)] + string[get_open_parens_index(
-            string) + 1:get_close_parens_index(string)] + string[get_close_parens_index(string)\
+    if _unnecessary_parens(string):
+        return string[:_get_open_parens_index(string)] + string[_get_open_parens_index(
+            string) + 1:_get_close_parens_index(string)] + string[_get_close_parens_index(string)\
              + 1:]
     return string
 
