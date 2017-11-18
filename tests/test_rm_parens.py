@@ -105,33 +105,3 @@ class TestRmParens(unittest.TestCase):
         string = 'if ((condition) or ((another) and (nest))):'
         res = rm_parens.remove_parens(string)
         self.assertEqual(res, 'if (condition) or ((another) and (nest)):')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
