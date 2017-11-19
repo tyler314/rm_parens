@@ -12,12 +12,6 @@ def _get_open_parens_index(string):
     """
     Return the index of the first open paren in the string.
     """
-    if 'if(' in string:
-        index = string.index('if(') + 2
-        string = string[:index] + ' ' + string[index:]
-    elif 'while(' in string:
-        index = string.index('while(') + 5
-        string = string[:index] + ' ' + string[index:]
     # Set index to be placed at the opening paren
     match = re.match(r'[ \t]*(if|while)[ \t]*\(', string)
     open_paren_match = match.group(0)
@@ -51,20 +45,28 @@ def _unnecessary_parens(string):
             return True
     return False
 
+def _add_space_buffer(string):
+    if 'if(' in string:
+        index = string.index('if(') + 2
+        string = string[:index] + ' ' + string[index:]
+    elif 'while(' in string:
+        index = string.index('while(') + 5
+        string = string[:index] + ' ' + string[index:]
+    return string
+
 def remove_parens(string):
     """
     Takes a string in and removes the unnecessary parenthesis, returns the result. Returns
     the same input if no unnecessary parenthesis exist.
     """
-
     if _unnecessary_parens(string):
+        string = _add_space_buffer(string)
         return string[:_get_open_parens_index(string)] + string[_get_open_parens_index(
             string) + 1:_get_close_parens_index(string)] + string[_get_close_parens_index(string)\
              + 1:]
     return string
 
-
-if __name__ == '__main__':
+def main():
     if len(sys.argv) < 2:
         print('Need to pass at least one file to edit as an argument')
         sys.exit(1)
@@ -80,3 +82,6 @@ if __name__ == '__main__':
             # If something goes wrong, write the file to it's original state
             except BaseException:
                 f.write(''.join(fileLines))
+
+if __name__ == '__main__':
+    main()
