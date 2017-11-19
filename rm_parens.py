@@ -77,7 +77,7 @@ def remove_parens(string):
 
 def main():
     """
-    Used as the entry point for the package
+    Used as the entry point for the package.
     """
     if len(sys.argv) < 2:
         print('Need to pass at least one file to edit as an argument')
