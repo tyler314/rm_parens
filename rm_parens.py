@@ -8,6 +8,7 @@ from __future__ import print_function
 import sys
 import re
 
+
 def _get_open_parens_index(string):
     """
     Return the index of the first open paren in the string.
@@ -17,11 +18,13 @@ def _get_open_parens_index(string):
     open_paren_match = match.group(0)
     return string.index(open_paren_match) + len(open_paren_match) - 1
 
+
 def _get_close_parens_index(string):
     """
     Return the index of the last close paren in the string.
     """
     return len(string) - string[::-1].index(')') - 1
+
 
 def _unnecessary_parens(string):
     """
@@ -45,7 +48,12 @@ def _unnecessary_parens(string):
             return True
     return False
 
+
 def _add_space_buffer(string):
+    """
+    Adds a space character between the if or while statement, and the '('
+    character if one does not exist.
+    """
     if 'if(' in string:
         index = string.index('if(') + 2
         string = string[:index] + ' ' + string[index:]
@@ -53,6 +61,7 @@ def _add_space_buffer(string):
         index = string.index('while(') + 5
         string = string[:index] + ' ' + string[index:]
     return string
+
 
 def remove_parens(string):
     """
@@ -62,18 +71,20 @@ def remove_parens(string):
     if _unnecessary_parens(string):
         string = _add_space_buffer(string)
         return string[:_get_open_parens_index(string)] + string[_get_open_parens_index(
-            string) + 1:_get_close_parens_index(string)] + string[_get_close_parens_index(string)\
-             + 1:]
+            string) + 1:_get_close_parens_index(string)] + string[_get_close_parens_index(string) + 1:]
     return string
 
+
 def main():
+    """
+    Used as the entry point for the package
+    """
     if len(sys.argv) < 2:
         print('Need to pass at least one file to edit as an argument')
         sys.exit(1)
     for j in range(1, len(sys.argv)):
         fileLines = open(sys.argv[j], 'r').readlines()
         newFileLines = []
-        updatedLine = None
         with open(sys.argv[j], 'w') as f:
             try:
                 for line in fileLines:
@@ -82,6 +93,7 @@ def main():
             # If something goes wrong, write the file to it's original state
             except BaseException:
                 f.write(''.join(fileLines))
+
 
 if __name__ == '__main__':
     main()
