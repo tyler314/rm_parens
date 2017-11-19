@@ -5,7 +5,6 @@ and 'while' blocks. It could be any file type, but the file is assumed to have P
 code and the proper syntax.
 """
 from __future__ import print_function
-import sys
 import re
 
 
